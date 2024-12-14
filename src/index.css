@@ -1,0 +1,28 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: "PoppinsItalic";
+  src: local("Poppins-Italic"),
+    url("./assets/Fonts/Poppins-Italic.ttf") format("truetype");
+}
+@font-face {
+  font-family: "PoppinsBold";
+  src: local("Poppins-Bold"),
+    url("./assets/Fonts/Poppins-Bold.ttf") format("truetype");
+}
+@font-face {
+  font-family: "PoppinsExtraBoldItalic";
+  src: local("Poppins-ExtraBoldItalic"),
+    url("./assets/Fonts/Poppins-ExtraBoldItalic.ttf") format("truetype");
+}
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+body {
+  background-color: hsl(0, 0%, 94%);
+}
