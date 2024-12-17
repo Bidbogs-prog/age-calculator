@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import arrow from "./assets/images/icon-arrow.svg";
 import "./App.css";
 
@@ -27,8 +27,8 @@ function App() {
     year: 0,
   });
 
+  const [isValid, setIsValid] = useState(false);
   const [isEmpty, setIsEmpty] = useState(false);
-
   const [age, setAge] = useState<AgeResult>({
     years: "- -",
     months: "- -",
@@ -41,6 +41,21 @@ function App() {
 
   const calculateAge = (e: any) => {
     e.preventDefault();
+
+    //date validation
+
+    function isDateValid(year: number, month: number, day: number): boolean {
+      const date = new Date(year, month - 1, day);
+      console.log(date);
+      return (
+        date.getFullYear() === year &&
+        date.getMonth() === month - 1 &&
+        date.getDate() === day
+      );
+    }
+
+    console.log(isDateValid(dateInput.year, dateInput.month, dateInput.day));
+
     if (
       dateInput.day < 0 ||
       dateInput.day > 31 ||
@@ -56,6 +71,10 @@ function App() {
       dateInput.year == 0
     ) {
       setIsEmpty(true);
+    } else if (
+      isDateValid(dateInput.year, dateInput.month, dateInput.day) == false
+    ) {
+      setIsValid(true);
     } else {
       // add calculation logic
       if (dayDiff < 0) {
@@ -79,6 +98,9 @@ function App() {
         days: dayDiff.toString(),
         years: yearDiff.toString(),
       });
+
+      setIsEmpty(false);
+      setIsValid(false);
     }
   };
 
@@ -92,7 +114,7 @@ function App() {
               {" "}
               <span
                 className={`text-lightgrey uppercase tracking-[2px] text-[11px] mr-auto mb-[5px] ${
-                  dateInput.day > 31 || dateInput.day < 0 || isEmpty
+                  dateInput.day > 31 || dateInput.day < 0 || isEmpty || isValid
                     ? "text-primaryRed"
                     : "text-lightgrey"
                 }`}
@@ -103,7 +125,7 @@ function App() {
               <input
                 placeholder="DD"
                 className={`border-solid border-[1px] border-offwhite w-[70px] rounded-lg h-[45px] px-[10px] focus:outline-none ${
-                  dateInput.day > 31 || dateInput.day < 0 || isEmpty
+                  dateInput.day > 31 || dateInput.day < 0 || isEmpty || isValid
                     ? "border-primaryRed"
                     : "border-offwhite"
                 }`}
@@ -131,6 +153,13 @@ function App() {
               >
                 This field is required
               </span>
+              <span
+                className={`text-[9px] absolute top-[65px] left-[-5px] w-[80px] mt-[5px] font-poppins400i ${
+                  isValid ? "inline-block text-primaryRed" : "hidden"
+                }`}
+              >
+                Must be a valid date
+              </span>
             </div>
 
             {/* // MONTH INPUT */}
@@ -138,7 +167,10 @@ function App() {
               {" "}
               <span
                 className={`text-lightgrey uppercase tracking-[2px] text-[11px] mr-auto mb-[5px] ${
-                  dateInput.month > 12 || dateInput.month < 0 || isEmpty
+                  dateInput.month > 12 ||
+                  dateInput.month < 0 ||
+                  isEmpty ||
+                  isValid
                     ? "text-primaryRed"
                     : "text-lightgrey"
                 } `}
@@ -148,7 +180,10 @@ function App() {
               <input
                 placeholder="MM"
                 className={`border-solid border-[1px] border-offwhite w-[70px] rounded-lg h-[45px] px-[10px] focus:outline-none ${
-                  dateInput.month > 12 || dateInput.month < 0 || isEmpty
+                  dateInput.month > 12 ||
+                  dateInput.month < 0 ||
+                  isEmpty ||
+                  isValid
                     ? "border-primaryRed"
                     : "border-offwhite"
                 }`}
@@ -171,9 +206,7 @@ function App() {
               </span>
               <span
                 className={`text-[9px] absolute top-[65px] left-[-5px] w-[80px] mt-[5px] font-poppins400i ${
-                  dateInput.month > 12 || dateInput.month < 0 || isEmpty
-                    ? "inline-block text-primaryRed"
-                    : "hidden"
+                  isEmpty ? "inline-block text-primaryRed" : "hidden"
                 }`}
               >
                 This field is required
@@ -187,7 +220,8 @@ function App() {
                 className={`text-lightgrey uppercase tracking-[2px] text-[11px] mr-auto mb-[5px] ${
                   dateInput.year > currentDate.year ||
                   dateInput.year < 0 ||
-                  isEmpty
+                  isEmpty ||
+                  isValid
                     ? "text-primaryRed"
                     : "text-lightgrey"
                 }`}
@@ -199,7 +233,8 @@ function App() {
                 className={`border-solid border-[1px] border-offwhite w-[70px] rounded-lg h-[45px] px-[10px] focus:outline-none ${
                   dateInput.year > currentDate.year ||
                   dateInput.year < 0 ||
-                  isEmpty
+                  isEmpty ||
+                  isValid
                     ? "border-primaryRed"
                     : "border-offwhite"
                 }`}
